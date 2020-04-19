@@ -6,43 +6,38 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { removeHTMLTags } from '../helpers';
 
-class SidebarItemComponent extends React.Component {
+const SidebarItem = ({_idx, _note, classes, selectedNoteIndex, deleteNote, selectNote}) => {
 
-  render(){
-
-    const {_idx, _note, classes, selectedNoteIndex} = this.props;
-
-    return(
-      <div key={_idx}>
-        <ListItem
-          className={classes.listItem}
-          selected={selectedNoteIndex === _idx}
-          alignItems='flex-start'>
-          <div
-            className={classes.textSection}
-            onClick={() => {this.selectNote(_note, _idx)}}>
-            <ListItemText
-            primary={_note.title}
-            secondary={removeHTMLTags(_note.body.substring(0, 30)) + '...'}>
-            </ListItemText>
-          </div>
-          <DeleteForeverIcon 
-          onClick={() => this.deleteNote(_note)}
-          className={classes.deleteIcon}></DeleteForeverIcon>
-        </ListItem> 
-      </div>
-    );
+  const selNote = (n, i) => {
+    selectNote(n, i);
   }
 
-  selectNote = (n, i) => {
-    this.props.selectNote(n, i);
-  }
-
-  deleteNote = (n) => {
+  const delNote = (n) => {
     if (window.confirm(`Are you sure you want to delete: ${n.title}`)) {
-      this.props.deleteNote(n);
+      deleteNote(n);
     }
   }
+  
+  return (
+    <div>
+      <ListItem
+        className={classes.listItem}
+        selected={selectedNoteIndex === _idx}
+        alignItems='flex-start'>
+        <div
+          className={classes.textSection}
+          onClick={() => {selNote(_note, _idx)}}>
+          <ListItemText
+          primary={_note.title}
+          secondary={removeHTMLTags(_note.body.substring(0, 30)) + '...'}>
+          </ListItemText>
+        </div>
+        <DeleteForeverIcon 
+        onClick={() => delNote(_note)}
+        className={classes.deleteIcon}></DeleteForeverIcon>
+      </ListItem> 
+    </div>   
+  )
 }
 
-export default withStyles(styles)(SidebarItemComponent);
+export default withStyles(styles)(SidebarItem);
